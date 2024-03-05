@@ -1,7 +1,6 @@
 <style>
   #system-statistics {
     height: 100%;
-    border: 1px solid brown;
   }
 </style>
 

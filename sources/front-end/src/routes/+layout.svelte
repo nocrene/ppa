@@ -39,7 +39,7 @@
       'main'
       'footer'
     ;
-    gap: 1rem;
+    gap: var(--main-grid-gap);
   
 
     height: 100svh;
