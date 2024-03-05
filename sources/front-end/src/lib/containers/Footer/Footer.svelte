@@ -8,5 +8,5 @@
 </style>
 
 <footer>
-  <a href="/license">nocrene</a>
+  <a href="/license">license</a>
 </footer>
