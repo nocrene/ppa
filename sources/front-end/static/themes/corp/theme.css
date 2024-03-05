@@ -1,0 +1,37 @@
+:root {
+  /* nord0 in palette */
+	--theme-black: hsl(220, 16%, 22%);
+  /* nord1 in palette */
+	--theme-dark_gray: hsl(222, 16%, 28%);
+  /* nord2 in palette */
+	--theme-gray: hsl(220, 17%, 32%);
+  /* nord3 in palette */
+	--theme-light_gray: hsl(220, 16%, 36%);
+  /* out of palette */
+	--theme-light_gray_bright: hsl(220, 17%, 46%);
+  /* nord4 in palette */
+	--theme-darkest_white: hsl(219, 28%, 88%);
+  /* nord5 in palette */
+	--theme-darker_white: hsl(218, 27%, 92%);
+  /* nord6 in palette */
+	--theme-white: hsl(218, 27%, 94%); 
+  /* nord7 in palette */
+	--theme-teal: hsl(179, 25%, 65%); 
+  /* nord8 in palette */
+	--theme-off_blue: hsl(193, 43%, 67%);
+  /* nord9 in palette */
+	--theme-glacier: hsl(210, 34%, 63%);
+  /* nord10 in palette */
+	--theme-blue: hsl(213, 32%, 52%);
+  /* nord11 in palette */
+	--theme-red: hsl(354, 42%, 56%);
+  /* nord12 in palette */
+	--theme-orange: hsl(14, 51%, 63%);
+  /* nord13 in palette */
+	--theme-yellow: hsl(40, 71%, 73%);
+  /* nord14 in palette */
+	--theme-green: hsl(92, 28%, 65%);
+  /* nord15 in palette */
+	--theme-purple: hsl(311, 20%, 63%);
+	--theme-none: transparent;
+}

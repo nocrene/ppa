@@ -1,0 +1,26 @@
+{
+  "name": "@nocrene/ppa",
+  "version": "0.0.0",
+  "description": "ppa",
+  "type": "module",
+  "packageManager": "pnpm@8.15.4",
+  "engines": {
+    "node": ">=21.4.0",
+    "pnpm": "8.15.4"
+  },
+  "engineStrict": true,
+  "scripts": {
+    "preinstall": "npx only-allow pnpm"
+  },
+  "keywords": [],
+  "author": "Dmitry N. Medvedev <dmitry.medvedev@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nocrene/ppa.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nocrene/ppa/issues"
+  },
+  "homepage": "https://github.com/nocrene/ppa#readme"
+}

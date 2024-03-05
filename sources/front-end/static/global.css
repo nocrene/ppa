@@ -1,0 +1,109 @@
+:root {
+  --main-font-family: "InterVariable";
+  --main-color: var(--theme-white);
+  --main-background-color: var(--theme-dark_gray);
+  --main-grid-gap: max(0.25vh, 0.25vw);
+  --main-border-radius: max(0.25vh, 0.25vw);
+
+  --main-button-height: 8vh;
+
+  --header-hight: 8vh;
+  --main-height: 1fr;
+  --footer-height: 8vh;
+  --footer-background-color: transparent;
+
+  --group-height: 20vh;
+
+  --theme-icon-svg-color: var(--main-color);
+  --transition-timing-function: cubic-bezier(.03,.97,.93,.95);
+  --transition-duration: 0.125s;
+
+  --border-radius: 0.25rem;
+  --scale-factor: 1.125;
+
+  --table-color: var(--theme-white);
+  --table-background-color: var(--theme-black);
+  --table-caption-color: var(--main-background-color);
+  --table-caption-background-color: var(--theme-black);
+  --table-header-row-color: var(--theme-white);
+  --table-header-row-background-color: var(--theme-black);
+  --table-rows-color: var(--theme-white);
+  --table-rows-background-color: var(--theme-black);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+
+  position: relative;
+}
+
+html {
+  /* pointer-events: none; */
+  user-select: none;
+}
+
+@supports (font-variation-settings: normal) {
+  html {
+    font-family: var(--main-font-family);
+  }
+}
+
+body {
+  color: var(--main-color);
+  background-color: var(--main-background-color);
+
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: 400;
+  font-variation-settings: "wght" 400, "slnt" 0;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "case" 0, "cpsp" 0, "dlig" 0, "frac" 0, "dnom" 0, "numr" 0, "salt" 0, "subs" 0, "sups" 0, "tnum", "zero", "ss01", "ss02" 0, "ss03" 0, "ss04" 0, "cv01" 0, "cv02" 0, "cv03" 0, "cv04" 0, "cv05" 0, "cv06" 0, "cv07", "cv08" 0, "cv09" 0, "cv10" 0, "cv11" 0, "calt", "ccmp", "kern";
+
+  min-height: 100svh;
+}
+
+h1, h2, h3, h4, h5 {
+  text-transform: uppercase;
+  font-weight: 900;
+  font-variation-settings: "wght" 900, "opsz" 32;
+}
+
+h1 {
+  font-size: 5rem;
+}
+
+h2 {
+  font-size: 4rem;
+}
+
+h3 {
+  font-size: 3rem;
+}
+
+h4 {
+  font-size: 2rem;
+}
+
+h5 {
+  font-size: 1rem;
+}
+
+svg {
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+button {
+  max-width: 6rem;
+  width: 6rem;
+  max-height: 3.5rem;
+  height: 3.5rem;
+  cursor: pointer;
+
+  background-color: var(--theme-green);
+  border-radius: var(--border-radius);
+  color: var(--main-background-color);
+  font-size: medium;
+}
