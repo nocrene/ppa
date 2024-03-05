@@ -1,6 +1,5 @@
 <style>
   header {
-    display: grid;
     grid-template-areas:
       'site-title'
       'nav'
@@ -18,10 +17,6 @@
       display: grid;
       grid-auto-flow: column;
       gap: var(--main-grid-gap);
-
-      & :is(a, a:visited) {
-        color: var(--theme-orange);
-      }
     }
   }
 </style>

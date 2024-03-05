@@ -107,3 +107,11 @@ button {
   color: var(--main-background-color);
   font-size: medium;
 }
+
+:is(a, a:visited) {
+  color: var(--theme-orange);
+}
+
+:is(header, footer) {
+  display: grid;
+}
