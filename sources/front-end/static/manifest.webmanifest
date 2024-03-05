@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+  "name": "binning done right",
+  "short_name": "bdr",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "binning done right",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }
+  ]
+}
