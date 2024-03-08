@@ -10,6 +10,9 @@
     & h1 {
       grid-area: site-title;
       color: var(--theme-black);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     & nav {
@@ -24,6 +27,7 @@
 <header>
   <h1>ppa</h1>
   <nav>
+    <a href="/">home</a>
     <a href="/sites">sites</a>
     <a href="/settings">settings</a>
   </nav>
