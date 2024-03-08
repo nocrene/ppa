@@ -3,7 +3,7 @@
   --main-color: var(--theme-white);
   --main-background-color: var(--theme-dark_gray);
   --main-grid-gap: max(0.25vh, 0.25vw);
-  --main-border-radius: max(0.25vh, 0.25vw);
+  --main-border-radius: max(0.125vh, 0.125vw);
 
   --main-button-height: 8vh;
 
@@ -110,8 +110,17 @@ button {
 
 :is(a, a:visited) {
   color: var(--theme-orange);
+  text-decoration: none;
 }
 
 :is(header, footer) {
   display: grid;
+}
+
+.container {
+  container-type: size;
+}
+
+.num {
+  font-feature-settings: "tnum" 1, "zero" 1, "cv01" 1, "cv09" 1, "cv02" 1, "cv03" 1, "cv04" 1;
 }

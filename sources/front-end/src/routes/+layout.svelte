@@ -2,6 +2,9 @@
   // import {
   //   ClientStore,
   // } from '$lib/stores/Client.svelte.js';
+  import {
+    SiteStore,
+  } from '$lib/stores/Sites.svelte.js';
 	import 'inter-ui/inter-variable.css';
   import Header from '../lib/containers/Header/Header.svelte';
   import Footer from '../lib/containers/Footer/Footer.svelte';
