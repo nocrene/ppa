@@ -1,35 +1,13 @@
 <script>
-  // import {
-  //   ClientStore,
-  // } from '$lib/stores/Client.svelte.js';
   import {
     SiteStore,
   } from '$lib/stores/Sites.svelte.js';
+  import {
+    WECStore,
+  } from '$lib/stores/WECs.svelte.js';
 	import 'inter-ui/inter-variable.css';
   import Header from '../lib/containers/Header/Header.svelte';
   import Footer from '../lib/containers/Footer/Footer.svelte';
-
-  let clientStore = null;
-
-  const handleConnectionChange = (e) => {
-    const {
-      target: {
-        downlink,
-        effectiveType,
-        rtt,
-      },
-    } = e;
-
-    console.log('connection quality changed', downlink, effectiveType, rtt);
-  };
-
-  $effect(() => {
-    // clientStore = new ClientStore();
-  });
-
-  $effect(() => {
-    // clientStore.navigator.connection.onchange = handleConnectionChange;
-  });
 </script>
 
 <style>

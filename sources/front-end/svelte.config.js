@@ -34,6 +34,7 @@ const config = {
     },
     files: {
       hooks: {
+        client: 'src/files/hooks/hooks.client.js',
         server: 'src/files/hooks/hooks.server.js',
       },
     },
