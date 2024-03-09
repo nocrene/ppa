@@ -14,10 +14,10 @@
   .site-panel {
     display: grid;
     grid-template-areas:
-      'site-name'
-      'num-of-wecs'
+      'site-name site-name'
+      '. num-of-wecs'
     ;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     grid-template-rows: auto 1fr;
     gap: var(--main-grid-gap);
     background-color: var(--theme-black);
@@ -46,7 +46,7 @@
       font-variation-settings: "wght" 900, "slnt" 0;
       background-color: var(--theme-dark_gray);
       color: var(--theme-black);
-      padding: var(--main-grid-gap);
+      padding-right: calc(var(--main-grid-gap) * 3);
       border-radius: var(--main-border-radius);
     }
   }

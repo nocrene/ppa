@@ -1,15 +1,4 @@
 <script>
-  /**
-   * @type {Array<object>}
-   */
-  let sites = $state([]);
-
-  for (let i = 0; i < 50; i += 1) {
-    sites.push({
-      id: crypto.randomUUID(),
-      name: `Site ${i}`,
-    });
-  };
 </script>
 
 <style>
