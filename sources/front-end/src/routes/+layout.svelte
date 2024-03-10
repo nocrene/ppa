@@ -5,9 +5,13 @@
   import {
     WECStore,
   } from '$lib/stores/WECs.svelte.js';
+  import {
+    LDRStore,
+  } from '$lib/stores/LDR.svelte.js';
 	import 'inter-ui/inter-variable.css';
   import Header from '../lib/containers/Header/Header.svelte';
   import Footer from '../lib/containers/Footer/Footer.svelte';
+  import LoadingPanel from '$lib/components/LoadingPanel/LoadingPanel.svelte';
 </script>
 
 <style>
@@ -52,9 +56,13 @@
 </style>
 
 <div class="layout-root">
-  <Header />
-  <main>
-	  <slot />
-  </main>
-  <Footer />
+  {#if LDRStore.isReady === true}
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  {:else}  
+    <!-- <LoadingPanel logMessages={LDRStore.log} /> -->
+  {/if}
 </div>
