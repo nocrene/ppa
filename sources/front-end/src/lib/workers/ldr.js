@@ -1,7 +1,12 @@
 import {
   WorkerProtoMessageTypes,
 } from '$lib/workers/constants/WorkerProtoMessageTypes.js';
-import { BroadcastChannelNames } from './constants/BroadCastChannelNames';
+import { 
+  BroadcastChannelNames,
+} from './constants/BroadCastChannelNames';
+import {
+  LDRStore,
+} from '$lib/stores/LDR.svelte.js';
 
 export class Loader {
   /** @type {Map} */
@@ -18,6 +23,7 @@ export class Loader {
   #allWorkersNames = [];
   #workerCTORs = [];
   #workerCONFIGd = [];
+  #workerSTARTd = [];
 
   constructor() {
     this.#allWorkersNames = Object.freeze(Object.keys(this.#workersMap).sort());
@@ -49,7 +55,7 @@ export class Loader {
       value.ptr.onmessageerror = value.handlers.onmessageerror;
     });
   
-    console.log(`[${this.constructor.name}] initialized broadcast channels: ${channelNames.join(', ')}`);
+    LDRStore.setLogMessage(`[${this.constructor.name}] initialized broadcast channels: ${channelNames.join(', ')}`);
   }
 
   #loadWorkers() {
@@ -67,13 +73,13 @@ export class Loader {
       worker.onerror = this.#handleWorkerError.bind(this);
       worker.onmessage = this.#handleWorkerMessage.bind(this);
 
-      console.log(`[${this.constructor.name}] worker ${workerName} has been loaded`);
+      LDRStore.setLogMessage(`[${this.constructor.name}] worker ${workerName} has been loaded`);
     }
   }
 
   #configWorkers() {
     this.#workers.forEach((worker, workerName) => {
-      console.log(`configuring worker ${workerName}`, worker);
+      LDRStore.setLogMessage(`configuring worker ${workerName}`, worker);
 
       worker.postMessage({
         type: WorkerProtoMessageTypes.CONFIG,
@@ -101,7 +107,7 @@ export class Loader {
 
     this.#workerCTORs.push(name);
 
-    console.log(`[${this.constructor.name}] worker ${name} constructor called`);
+    LDRStore.setLogMessage(`[${this.constructor.name}] worker ${name} constructor called`);
     
     if (this.#allWorkersNames.length !== this.#workerCTORs.length) {
       return;
@@ -118,7 +124,7 @@ export class Loader {
 
   #startWorkers() {
     this.#workers.forEach((worker, workerName) => {
-      console.log(`[${this.constructor.name}] starting worker ${workerName}...`);
+      LDRStore.setLogMessage(`[${this.constructor.name}] starting worker ${workerName}...`);
 
       worker.postMessage({
         type: WorkerProtoMessageTypes.START,
@@ -137,7 +143,7 @@ export class Loader {
     }
 
     this.#workerCONFIGd.push(name);
-    console.log(`[${this.constructor.name}] worker ${name} has been configured`);
+    LDRStore.setLogMessage(`[${this.constructor.name}] worker ${name} has been configured`);
 
     if (this.#areArraysEqual(this.#allWorkersNames, this.#workerCONFIGd) === false) {
       return;
@@ -147,7 +153,23 @@ export class Loader {
   }
 
   #handleWorkerStart(payload) {
-    console.log(`[${this.constructor.name}] worker ${payload.name} has been started`);
+    const {
+      name,
+    } = payload;
+
+    if (this.#workerSTARTd.includes(name) === true) {
+      throw new Error(`worker ${name} has already been started`);
+    }
+
+    this.#workerSTARTd.push(name);
+
+    if (this.#areArraysEqual(this.#allWorkersNames, this.#workerSTARTd) === false) {
+      return;
+    }
+
+    LDRStore.setIsLoaded(true);
+
+    LDRStore.setLogMessage(`[${this.constructor.name}] worker ${payload.name} has been started`);
   }
 
   #handleWorkerMessage(e) {
@@ -175,7 +197,28 @@ export class Loader {
   }
 
   #unloadWorkers() {
-    throw new ReferenceError('not yet implemented');
+    this.#workers.forEach((worker, workerName) => {
+      LDRStore.setLogMessage(`[${this.constructor.name}] stopping worker ${workerName}...`);
+
+      worker.postMessage({
+        type: WorkerProtoMessageTypes.STOP,
+        payload: null,
+      });
+    });
+  }
+
+  #closeBroadcastChannels() {
+    const channelNames = [];
+
+    Object.entries(this.#broadcastChannels).forEach(([key, value]) => {
+      value.ptr.onmessage = undefined;
+      value.ptr.onmessageerror = undefined;
+      value.ptr.close();
+
+      channelNames.push(key);
+    });
+  
+    LDRStore.setLogMessage(`[${this.constructor.name}] closed broadcast channels: ${channelNames.join(', ')}`);
   }
 
   async init() {
@@ -186,5 +229,6 @@ export class Loader {
 
   async finit() {
     await this.#unloadWorkers();
+    await this.#closeBroadcastChannels();
   }
 }
