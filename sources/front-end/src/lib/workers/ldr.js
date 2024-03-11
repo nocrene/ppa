@@ -7,6 +7,15 @@ import {
 import {
   LDRStore,
 } from '$lib/stores/LDR.svelte.js';
+import {
+  LDRMachine,
+} from './ldr.xstate/LDR.machine.js';
+import {
+  log,
+} from './ldr.xstate/actions/logAction.js';
+import {
+  LDRSignals,
+} from './ldr.xstate/LDRSignals.js';
 
 export class Loader {
   /** @type {Map} */
@@ -24,6 +33,7 @@ export class Loader {
   #workerCTORs = [];
   #workerCONFIGd = [];
   #workerSTARTd = [];
+  #ldrMachine = null;
 
   constructor() {
     this.#allWorkersNames = Object.freeze(Object.keys(this.#workersMap).sort());
@@ -46,6 +56,8 @@ export class Loader {
   }
 
   #initBroadcastChannels() {
+    console.log('#initBroadcastChannels');
+
     const channelNames = [];
 
     Object.entries(this.#broadcastChannels).forEach(([key, value]) => {
@@ -56,37 +68,80 @@ export class Loader {
     });
   
     LDRStore.setLogMessage(`[${this.constructor.name}] initialized broadcast channels: ${channelNames.join(', ')}`);
-  }
-
-  #loadWorkers() {
-    const workerNames = Object.keys(this.#workersMap);
-
-    for(let workerName of workerNames) {
-      const workerInfo = this.#workersMap[workerName];
-      const worker = new Worker(new URL(workerInfo.url, import.meta.url), {
-        type: 'module',
-        name: workerName,
-      });
-
-      this.#workers.set(workerName, worker);
-
-      worker.onerror = this.#handleWorkerError.bind(this);
-      worker.onmessage = this.#handleWorkerMessage.bind(this);
-
-      LDRStore.setLogMessage(`[${this.constructor.name}] worker ${workerName} has been loaded`);
-    }
-  }
-
-  #configWorkers() {
-    this.#workers.forEach((worker, workerName) => {
-      LDRStore.setLogMessage(`configuring worker ${workerName}`, worker);
-
-      worker.postMessage({
-        type: WorkerProtoMessageTypes.CONFIG,
-        payload: this.#workersMap[workerName].conf,
-      });
+    this.#ldrMachine.send({
+      type: LDRSignals.BROADCAST_CHANNELS_INITIALIZED,
     });
   }
+
+  // #loadWorkers() {
+  //   console.log('#loadWorkers');
+
+  //   const workerNames = Object.keys(this.#workersMap);
+
+  //   for(let workerName of workerNames) {
+  //     const workerInfo = this.#workersMap[workerName];
+  //     const worker = new Worker(new URL(workerInfo.url, import.meta.url), {
+  //       type: 'module',
+  //       name: workerName,
+  //     });
+
+  //     this.#workers.set(workerName, worker);
+
+  //     worker.onerror = this.#handleWorkerError.bind(this);
+  //     worker.onmessage = this.#handleWorkerMessage.bind(this);
+
+  //     LDRStore.setLogMessage(`[${this.constructor.name}] worker ${workerName} has been loaded`);
+  //   }
+  // }
+
+  #loadWorker({ context, event }, params) {
+    const {
+      workerName,
+    } = params;
+
+    if (typeof workerName === 'undefined') {
+      throw new ReferenceError('workerName is undefined');
+    }
+
+    const workerInfo = this.#workersMap[workerName];
+    const worker = new Worker(new URL(workerInfo.url, import.meta.url), {
+      type: 'module',
+      name: workerName,
+    });
+
+    this.#workers.set(workerName, worker);
+
+    worker.onerror = this.#handleWorkerError.bind(this);
+    worker.onmessage = this.#handleWorkerMessage.bind(this);
+
+    LDRStore.setLogMessage(`[${this.constructor.name}] worker ${workerName} has been loaded`);
+  }
+
+  #configWorker({ context, event }, params) {
+    const {
+      workerName,
+    } = params;
+
+    if(typeof workerName === 'undefined') {
+      throw new ReferenceError('workerName is undefined');
+    }
+
+    this.#workers.get(workerName).postMessage({
+      type: WorkerProtoMessageTypes.CONFIG,
+      payload: this.#workersMap[workerName].conf,
+    });
+  }
+
+  // #configWorkers() {
+  //   this.#workers.forEach((worker, workerName) => {
+  //     LDRStore.setLogMessage(`configuring worker ${workerName}`, worker);
+
+  //     worker.postMessage({
+  //       type: WorkerProtoMessageTypes.CONFIG,
+  //       payload: this.#workersMap[workerName].conf,
+  //     });
+  //   });
+  // }
 
   #handleWorkerError(e) {
     console.error(e);
@@ -96,31 +151,38 @@ export class Loader {
     return left.every((element, idx) => element === right[idx]);
   }
 
-  #handleWorkerCTOR(payload) {
-    const {
-      name,
-    } = payload;
+  // #handleWorkerCTOR(payload) {
+  //   console.log('#handleWorkerCTOR', payload);
+
+  //   const {
+  //     name,
+  //   } = payload;
     
-    if (this.#workerCTORs.includes(name) === true) {
-      throw new Error(`worker ${name} is already CTORd`);
-    }
+  //   if (this.#workerCTORs.includes(name) === true) {
+  //     throw new Error(`worker ${name} is already CTORd`);
+  //   }
 
-    this.#workerCTORs.push(name);
+  //   this.#workerCTORs.push(name);
 
-    LDRStore.setLogMessage(`[${this.constructor.name}] worker ${name} constructor called`);
+  //   LDRStore.setLogMessage(`[${this.constructor.name}] worker ${name} constructor called`);
+
+  //   this.#ldrMachine.send({
+  //     type: LDRSignals.WORKER_LOADED,
+  //     payload: name,
+  //   })
     
-    if (this.#allWorkersNames.length !== this.#workerCTORs.length) {
-      return;
-    }
+  //   if (this.#allWorkersNames.length !== this.#workerCTORs.length) {
+  //     return;
+  //   }
 
-    this.#workerCTORs.sort();
+  //   this.#workerCTORs.sort();
 
-    if (this.#areArraysEqual(this.#allWorkersNames, this.#workerCTORs) === false) {
-      return;
-    }
+  //   if (this.#areArraysEqual(this.#allWorkersNames, this.#workerCTORs) === false) {
+  //     return;
+  //   }
 
-    this.#configWorkers();
-  }
+  //   this.#configWorkers();
+  // }
 
   #startWorkers() {
     this.#workers.forEach((worker, workerName) => {
@@ -133,23 +195,45 @@ export class Loader {
     });
   }
 
+  #startWorker({ context, event }, params) {
+    const {
+      workerName,
+    } = params;
+
+    console.log('#startWorker', workerName);
+
+    this.#workers.get(workerName).postMessage({
+      type: WorkerProtoMessageTypes.START,
+      payload: null,
+    });
+  }
+
   #handleWorkerCONFIG(payload) {
     const {
       name,
     } = payload;
 
-    if (this.#workerCONFIGd.includes(name) === true) {
-      throw new Error(`worker ${name} has already been configured`);
-    }
+    console.log('#handleWorkerCONFIG', name);
 
-    this.#workerCONFIGd.push(name);
-    LDRStore.setLogMessage(`[${this.constructor.name}] worker ${name} has been configured`);
+    this.#ldrMachine.send({
+      type: LDRSignals.WORKER_CONFIGURED,
+      payload: {
+        name,
+      },
+    });
 
-    if (this.#areArraysEqual(this.#allWorkersNames, this.#workerCONFIGd) === false) {
-      return;
-    }
+    // if (this.#workerCONFIGd.includes(name) === true) {
+    //   throw new Error(`worker ${name} has already been configured`);
+    // }
 
-    this.#startWorkers();
+    // this.#workerCONFIGd.push(name);
+    // LDRStore.setLogMessage(`[${this.constructor.name}] worker ${name} has been configured`);
+
+    // if (this.#areArraysEqual(this.#allWorkersNames, this.#workerCONFIGd) === false) {
+    //   return;
+    // }
+
+    // this.#startWorkers();
   }
 
   #handleWorkerStart(payload) {
@@ -157,19 +241,28 @@ export class Loader {
       name,
     } = payload;
 
-    if (this.#workerSTARTd.includes(name) === true) {
-      throw new Error(`worker ${name} has already been started`);
-    }
+    console.log('#handleWorkerStart', name);
+    
+    this.#ldrMachine.send({
+      type: LDRSignals.WORKER_STARTED,
+      payload: {
+        name,
+      },
+    });
 
-    this.#workerSTARTd.push(name);
+    // if (this.#workerSTARTd.includes(name) === true) {
+    //   throw new Error(`worker ${name} has already been started`);
+    // }
 
-    if (this.#areArraysEqual(this.#allWorkersNames, this.#workerSTARTd) === false) {
-      return;
-    }
+    // this.#workerSTARTd.push(name);
+
+    // if (this.#areArraysEqual(this.#allWorkersNames, this.#workerSTARTd) === false) {
+    //   return;
+    // }
 
     LDRStore.setIsLoaded(true);
 
-    LDRStore.setLogMessage(`[${this.constructor.name}] worker ${payload.name} has been started`);
+    // LDRStore.setLogMessage(`[${this.constructor.name}] worker ${payload.name} has been started`);
   }
 
   #handleWorkerMessage(e) {
@@ -182,7 +275,14 @@ export class Loader {
 
     switch(type) {
       case WorkerProtoMessageTypes.CTOR: {
-        return this.#handleWorkerCTOR(payload);
+        this.#ldrMachine.send({
+          type: LDRSignals.WORKER_LOADED,
+          payload: {
+            name: payload.name,
+          },
+        })
+
+        break;
       }
       case WorkerProtoMessageTypes.CONFIG: {
         return this.#handleWorkerCONFIG(payload);
@@ -221,14 +321,34 @@ export class Loader {
     LDRStore.setLogMessage(`[${this.constructor.name}] closed broadcast channels: ${channelNames.join(', ')}`);
   }
 
-  async init() {
-    this.#initBroadcastChannels();
+  #handleMachineSnapshot(snapshot) {
+    console.log({ snapshot });
+  }
 
-    await this.#loadWorkers();
+  async init() {
+    // this.#initBroadcastChannels();
+
+    // await this.#loadWorkers();
+
+    this.#ldrMachine = LDRMachine({
+      workerNames: this.#allWorkersNames,
+    }, {
+      actions: {
+        log: log.bind(this),
+        loadWorker: this.#loadWorker.bind(this),
+        configWorker: this.#configWorker.bind(this),
+        startWorker: this.#startWorker.bind(this),
+        initBroadcastChannels: this.#initBroadcastChannels.bind(this),
+      },
+    });
+    this.#ldrMachine.subscribe(this.#handleMachineSnapshot);
+    this.#ldrMachine.start();
   }
 
   async finit() {
     await this.#unloadWorkers();
     await this.#closeBroadcastChannels();
+
+    this.#ldrMachine.stop();
   }
 }
