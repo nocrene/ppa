@@ -2,6 +2,7 @@ import {
   setup,
   createActor,
   assign,
+  emit,
 } from 'xstate';
 import {
   LDRStates,
@@ -70,14 +71,6 @@ const ldrMachine = ({ actions }) => setup({
   },
   states: {
     [LDRStates.INITIAL]: {
-      entry: [
-        {
-          type: 'log',
-          params: () => ({
-            hello: 'world',
-          }),
-        },
-      ],
       always: {
         target: LDRStates.INIT_BROADCAST_CHANNELS,
       },
@@ -198,7 +191,7 @@ const ldrMachine = ({ actions }) => setup({
           ],
           target: LDRStates.CHECK_ALL_WORKERS_CONFIGURED,
         },
-      }
+      },
     },
     [LDRStates.CHECK_ALL_WORKERS_CONFIGURED]: {
       always: [
