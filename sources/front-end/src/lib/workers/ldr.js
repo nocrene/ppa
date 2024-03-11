@@ -73,27 +73,6 @@ export class Loader {
     });
   }
 
-  // #loadWorkers() {
-  //   console.log('#loadWorkers');
-
-  //   const workerNames = Object.keys(this.#workersMap);
-
-  //   for(let workerName of workerNames) {
-  //     const workerInfo = this.#workersMap[workerName];
-  //     const worker = new Worker(new URL(workerInfo.url, import.meta.url), {
-  //       type: 'module',
-  //       name: workerName,
-  //     });
-
-  //     this.#workers.set(workerName, worker);
-
-  //     worker.onerror = this.#handleWorkerError.bind(this);
-  //     worker.onmessage = this.#handleWorkerMessage.bind(this);
-
-  //     LDRStore.setLogMessage(`[${this.constructor.name}] worker ${workerName} has been loaded`);
-  //   }
-  // }
-
   #loadWorker({ context, event }, params) {
     const {
       workerName,
@@ -132,17 +111,6 @@ export class Loader {
     });
   }
 
-  // #configWorkers() {
-  //   this.#workers.forEach((worker, workerName) => {
-  //     LDRStore.setLogMessage(`configuring worker ${workerName}`, worker);
-
-  //     worker.postMessage({
-  //       type: WorkerProtoMessageTypes.CONFIG,
-  //       payload: this.#workersMap[workerName].conf,
-  //     });
-  //   });
-  // }
-
   #handleWorkerError(e) {
     console.error(e);
   }
@@ -150,39 +118,6 @@ export class Loader {
   #areArraysEqual(left, right) {
     return left.every((element, idx) => element === right[idx]);
   }
-
-  // #handleWorkerCTOR(payload) {
-  //   console.log('#handleWorkerCTOR', payload);
-
-  //   const {
-  //     name,
-  //   } = payload;
-    
-  //   if (this.#workerCTORs.includes(name) === true) {
-  //     throw new Error(`worker ${name} is already CTORd`);
-  //   }
-
-  //   this.#workerCTORs.push(name);
-
-  //   LDRStore.setLogMessage(`[${this.constructor.name}] worker ${name} constructor called`);
-
-  //   this.#ldrMachine.send({
-  //     type: LDRSignals.WORKER_LOADED,
-  //     payload: name,
-  //   })
-    
-  //   if (this.#allWorkersNames.length !== this.#workerCTORs.length) {
-  //     return;
-  //   }
-
-  //   this.#workerCTORs.sort();
-
-  //   if (this.#areArraysEqual(this.#allWorkersNames, this.#workerCTORs) === false) {
-  //     return;
-  //   }
-
-  //   this.#configWorkers();
-  // }
 
   #startWorkers() {
     this.#workers.forEach((worker, workerName) => {
@@ -221,19 +156,6 @@ export class Loader {
         name,
       },
     });
-
-    // if (this.#workerCONFIGd.includes(name) === true) {
-    //   throw new Error(`worker ${name} has already been configured`);
-    // }
-
-    // this.#workerCONFIGd.push(name);
-    // LDRStore.setLogMessage(`[${this.constructor.name}] worker ${name} has been configured`);
-
-    // if (this.#areArraysEqual(this.#allWorkersNames, this.#workerCONFIGd) === false) {
-    //   return;
-    // }
-
-    // this.#startWorkers();
   }
 
   #handleWorkerStart(payload) {
@@ -249,16 +171,6 @@ export class Loader {
         name,
       },
     });
-
-    // if (this.#workerSTARTd.includes(name) === true) {
-    //   throw new Error(`worker ${name} has already been started`);
-    // }
-
-    // this.#workerSTARTd.push(name);
-
-    // if (this.#areArraysEqual(this.#allWorkersNames, this.#workerSTARTd) === false) {
-    //   return;
-    // }
 
     LDRStore.setIsLoaded(true);
 
@@ -326,10 +238,6 @@ export class Loader {
   }
 
   async init() {
-    // this.#initBroadcastChannels();
-
-    // await this.#loadWorkers();
-
     this.#ldrMachine = LDRMachine({
       workerNames: this.#allWorkersNames,
     }, {
