@@ -40,5 +40,6 @@
 		"inter-ui": {
 			"injected": true
 		}
-	}
+	},
+  "author": "Dmitry N. Medvedev <dmitry.medvedev@gmail.com>"
 }

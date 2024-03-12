@@ -1,0 +1,72 @@
+{
+  "name": "@nocrene/libapig",
+  "version": "0.0.0",
+  "private": true,
+  "description": "[library] API Gateway",
+  "main": "LibAPIGServer.mjs",
+  "type": "module",
+  "packageManager": "pnpm@8.15.4",
+  "engines": {
+    "node": "21.7.1",
+    "pnpm": "8.15.4"
+  },
+  "engineStrict": true,
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "lint": "./node_modules/.bin/eslint ./ --ext .mjs",
+    "test-skip": "pnpm run lint && NODE_ENV=test NODE_DEBUG=LibAPIGServer* node --env-file=./specs/.env ./node_modules/.bin/c8 ./node_modules/.bin/mocha",
+    "test": "NODE_ENV=test NODE_DEBUG=LibAPIGServer* node --env-file=specs/.env --test **/specs/*.spec.mjs --experimental-test-coverage --test-reporter=lcov --test-reporter-destination=lcov.info"
+  },
+  "keywords": [],
+  "author": "Dmitry N. Medvedev <dmitry.medvedev@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "nanoid": "^5.0.6",
+    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.42.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-import-resolver-node": "^0.3.9",
+    "eslint-module-utils": "^2.8.1",
+    "eslint-plugin-chai-friendly": "^0.7.4",
+    "eslint-plugin-es": "^4.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-rule-composer": "^0.3.0",
+    "eslint-scope": "^8.0.0",
+    "eslint-utils": "^3.0.0",
+    "eslint-visitor-keys": "^4.0.0",
+    "ws": "^8.16.0"
+  },
+  "mocha": {
+    "allowUncaught": true,
+    "failZero": true,
+    "async-only": false,
+    "bail": true,
+    "checkLeaks": true,
+    "forbidOnly": true,
+    "exit": true,
+    "forbidPending": true,
+    "slow": 50,
+    "timeout": 1000,
+    "color": true,
+    "diff": true,
+    "fullTrace": true,
+    "growl": false,
+    "inline-diffs": true,
+    "reporter": "spec",
+    "noConfig": true,
+    "noOpts": true,
+    "require": [
+      "specs/mocha/mocha.mochaGlobalSetup.mjs",
+      "specs/mocha/mocha.mochaGlobalTeardown.mjs"
+    ],
+    "exclude": [
+      "**/node_modules/**/*"
+    ],
+    "spec": [
+      "**/specs/*.mjs"
+    ]
+  }
+}
