@@ -36,8 +36,6 @@ describe('LibAPIG', function describeLibAPIGServer() {
 
     await wss.start();
 
-    serverConfig = getServerConfig(debuglog);
-
     debuglog({ serverConfig });
   });
 
