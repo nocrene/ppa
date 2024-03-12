@@ -1,0 +1,37 @@
+{
+  "reporter": [
+    "lcov"
+  ],
+  "extension": [
+    ".mjs"
+  ],
+  "include": [
+    "**/*.mjs"
+  ],
+  "exclude": [
+    "**/*.spec.mjs"
+  ],
+  "watermarks": {
+    "lines": [
+      80,
+      95
+    ],
+    "functions": [
+      80,
+      95
+    ],
+    "branches": [
+      80,
+      95
+    ],
+    "statements": [
+      80,
+      95
+    ]
+  },
+  "lines": 95,
+  "branches": "82",
+  "statements": "95",
+  "all": true,
+  "check-coverage": false
+}
