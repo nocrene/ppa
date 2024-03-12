@@ -14,7 +14,7 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "lint": "./node_modules/.bin/eslint ./ --ext .mjs --fix",
-    "test": "pnpm run lint && NODE_ENV=test NODE_DEBUG=LibAPIGServer* node --env-file=specs/.env --test **/specs/*.spec.mjs --experimental-test-coverage --test-reporter=lcov --test-reporter-destination=lcov.info"
+    "test": "pnpm run lint && NODE_ENV=test NODE_DEBUG=LibAPIGServer* NODE_V8_COVERAGE=./coverage node --experimental-test-coverage --env-file=specs/.env --test **/specs/*.spec.mjs --test-reporter=lcov --test-reporter-destination=lcov.info"
   },
   "keywords": [],
   "author": "Dmitry N. Medvedev <dmitry.medvedev@gmail.com>",
