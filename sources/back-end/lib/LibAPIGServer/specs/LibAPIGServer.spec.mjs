@@ -8,13 +8,8 @@ import {
 // eslint-disable-next-line no-unused-vars
 import WebSocket from 'ws';
 import {
-  // eslint-disable-next-line no-unused-vars
   nanoid,
 } from 'nanoid';
-// import {
-//   // eslint-disable-next-line no-unused-vars
-//   MessageTypes,
-// } from '@dmitry-n-medvedev/common/MessageTypes.mjs';
 import {
   LibAPIGServer,
 } from '../LibAPIGServer.mjs';
@@ -24,9 +19,6 @@ import {
 import {
   newClient,
 } from './helpers/newClient.mjs';
-import {
-  mochaGlobalSetup,
-} from './mocha/mocha.mochaGlobalSetup.mjs';
 import {
   mochaGlobalTeardown,
 } from './mocha/mocha.mochaGlobalTeardown.mjs';
@@ -39,7 +31,8 @@ describe('LibAPIG', function describeLibAPIGServer() {
   let wss = null;
 
   before(async function doBefore() {
-    wss = mochaGlobalSetup();
+    serverConfig = getServerConfig(debuglog);
+    wss = new LibAPIGServer(serverConfig);
 
     await wss.start();
 
