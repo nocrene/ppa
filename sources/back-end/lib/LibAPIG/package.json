@@ -13,9 +13,8 @@
   "engineStrict": true,
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "lint": "./node_modules/.bin/eslint ./ --ext .mjs",
-    "test-skip": "pnpm run lint && NODE_ENV=test NODE_DEBUG=LibAPIGServer* node --env-file=./specs/.env ./node_modules/.bin/c8 ./node_modules/.bin/mocha",
-    "test": "NODE_ENV=test NODE_DEBUG=LibAPIGServer* node --env-file=specs/.env --test **/specs/*.spec.mjs --experimental-test-coverage --test-reporter=lcov --test-reporter-destination=lcov.info"
+    "lint": "./node_modules/.bin/eslint ./ --ext .mjs --fix",
+    "test": "pnpm run lint && NODE_ENV=test NODE_DEBUG=LibAPIGServer* node --env-file=specs/.env --test **/specs/*.spec.mjs --experimental-test-coverage --test-reporter=lcov --test-reporter-destination=lcov.info"
   },
   "keywords": [],
   "author": "Dmitry N. Medvedev <dmitry.medvedev@gmail.com>",

@@ -2,7 +2,6 @@ import util from 'node:util';
 import {
   describe,
   it,
-  test,
   before,
   after,
 } from 'node:test';
@@ -48,7 +47,7 @@ describe('LibAPIG', function describeLibAPIGServer() {
 
     debuglog({ serverConfig });
   });
-  
+
   after(async function doAfter() {
     return mochaGlobalTeardown(wss);
   });
