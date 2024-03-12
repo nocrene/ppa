@@ -28,7 +28,7 @@ describe('LibAPIG', function describeLibAPIGServer() {
   let wss = null;
 
   before(async function doBefore() {
-    serverConfig = getServerConfig(debuglog);
+    serverConfig = getServerConfig();
     wss = new LibAPIGServer(serverConfig);
 
     await wss.start();
