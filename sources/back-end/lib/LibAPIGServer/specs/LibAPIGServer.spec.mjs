@@ -19,9 +19,6 @@ import {
 import {
   newClient,
 } from './helpers/newClient.mjs';
-import {
-  mochaGlobalTeardown,
-} from './mocha/mocha.mochaGlobalTeardown.mjs';
 
 describe('LibAPIG', function describeLibAPIGServer() {
   const debuglog = util.debug(`${LibAPIGServer.name}:specs`);
@@ -40,7 +37,7 @@ describe('LibAPIG', function describeLibAPIGServer() {
   });
 
   after(async function doAfter() {
-    return mochaGlobalTeardown(wss);
+    return wss.stop();
   });
 
   it('should ping all handlers', async function shouldPingPaths() {
