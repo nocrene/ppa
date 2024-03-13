@@ -14,7 +14,7 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "lint": "./node_modules/.bin/eslint ./ --ext .mjs --fix",
-    "test": "pnpm run lint && node --experimental-test-coverage --env-file=specs/.env --test **/specs/*.spec.mjs --test-reporter=lcov --test-reporter-destination=lcov.info"
+    "test": "pnpm run lint && node --experimental-test-coverage --env-file=specs/.env-test --env-file=specs/.env --test **/specs/*.spec.mjs --test-reporter=lcov --test-reporter-destination=lcov.info"
   },
   "keywords": [],
   "author": "Dmitry N. Medvedev <dmitry.medvedev@gmail.com>",
@@ -24,6 +24,9 @@
     "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.42.0"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.23.10",
+    "@babel/eslint-plugin": "^7.23.5",
+    "@babel/preset-env": "^7.24.0",
     "eslint": "^8.57.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-import-resolver-node": "^0.3.9",
