@@ -2,7 +2,7 @@ module.exports = {
   env: {
     es2022: true,
     node: true,
-    mocha: true,
+    mocha: false,
     browser: true,
   },
   extends: [
