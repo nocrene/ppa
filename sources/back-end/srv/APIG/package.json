@@ -1,0 +1,75 @@
+{
+  "name": "@nocrene/apig",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "[srv] API Gateway Server",
+  "packageManager": "pnpm@8.15.4",
+  "engines": {
+    "node": "21.7.1",
+    "pnpm": "8.15.4"
+  },
+  "engineStrict": true,
+  "main": "server.mjs",
+  "bin": "server.mjs",
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "dev:server": "./node_modules/.bin/linkemon -V ./server.mjs"
+  },
+  "keywords": [],
+  "author": "Dmitry N. Medvedev <dmitry.medvedev@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@nocrene/libapig": "workspace:^"
+  },
+  "devDependencies": {
+    "linkemon": "^0.2.0",
+    "nodemon": "^3.1.0"
+  },
+  "nodemonConfig": {
+    "restartable": "rs",
+    "colours": true,
+    "ext": "mjs",
+    "verbose": true,
+    "exec": "./server.mjs",
+    "watch": [
+      "./node_modules/@nocrene/**/*.mjs",
+      "./server.mjs"
+    ],
+    "events": {
+      "start": "clear"
+    }
+  },
+  "dependenciesMeta": {
+    "@dmitry-n-medvedev/common": {
+      "injected": true
+    },
+    "@dmitry-n-medvedev/deserializers.donatemessage": {
+      "injected": true
+    },
+    "@dmitry-n-medvedev/deserializers.moneymessage": {
+      "injected": true
+    },
+    "@dmitry-n-medvedev/fbs": {
+      "injected": true
+    },
+    "@dmitry-n-medvedev/serializers.moneymessage": {
+      "injected": true
+    },
+    "@dmitry-n-medvedev/serializers.timestampmessage": {
+      "injected": true
+    },
+    "@dmitry-n-medvedev/libwebsocketserver": {
+      "injected": true
+    },
+    "dotenv": {
+      "injected": true
+    },
+    "@dmitry-n-medvedev/libdb": {
+      "injected": true
+    },
+    "flatbuffers": {
+      "injected": true
+    }
+  }
+}
