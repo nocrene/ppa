@@ -19,6 +19,7 @@ import {
 import {
   newClient,
 } from './helpers/newClient.mjs';
+import { LibAPIGEvents } from '../LibAPIGEvents.mjs';
 
 describe('LibAPIG', function describeLibAPIGServer() {
   const debuglog = util.debug(`${LibAPIGServer.name}:specs`);
@@ -78,6 +79,14 @@ describe('LibAPIG', function describeLibAPIGServer() {
 
         return ok();
       });
+    });
+
+    wss.Events.on(LibAPIGEvents.CLIENT_CONNECTED, ({ clientId }) => {
+      debuglog('[TEST]', LibAPIGEvents.CLIENT_CONNECTED, clientId);
+    });
+
+    wss.Events.on(LibAPIGEvents.CLIENT_DISCONNECTED, ({ clientId }) => {
+      debuglog('[TEST]', LibAPIGEvents.CLIENT_DISCONNECTED, clientId);
     });
 
     let client = newClient(serverConfig.server.proto, serverConfig.server.host, serverConfig.server.port, '/');
