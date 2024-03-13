@@ -12,9 +12,9 @@ import {
 import {
   LibAPIGEvents,
 } from './LibAPIGEvents.mjs';
-import {
-  Topics,
-} from './Topics.mjs';
+// import {
+//   Topics,
+// } from './Topics.mjs';
 
 const SHOULD_MESSAGE_BE_BINARY = true;
 const SHOULD_MESSAGE_BE_COMPRESSED = true;
@@ -138,8 +138,8 @@ export class LibAPIGServer {
               clientId: ws.id,
             });
 
-            ws.subscribe(Topics.SERVER.TS);
-            ws.subscribe(Topics.SERVER.MONEY);
+            // ws.subscribe(Topics.SERVER.TS);
+            // ws.subscribe(Topics.SERVER.MONEY);
           },
           message: (ws = null, message = null, isBinary = false) => {
             this.#events.emit(LibAPIGEvents.MESSAGE_EVENT, {
